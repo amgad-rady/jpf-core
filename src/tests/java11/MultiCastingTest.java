@@ -15,20 +15,31 @@ public class MultiCastingTest extends TestJPF {
     double circumference();
   }
 
-  public class UnitSquare implements Area, Circumference {
+  public interface Dimension {
+    int dimension();
+  }
+
+  public class UnitSquare implements Area, Circumference, Dimension {
+    @Override
     public double area() {
       return 1.0;
     }
 
+    @Override
     public double circumference() {
       return 4.0;
+    }
+
+    @Override
+    public int dimension() {
+      return 2;
     }
   }
 
   @Test
   public void testShapeCast() {
     Object sq = new UnitSquare();
-    sq = (Area & Circumference) sq;
+    sq = (Area & Circumference & Dimension) sq;
   }
 
   @Test
