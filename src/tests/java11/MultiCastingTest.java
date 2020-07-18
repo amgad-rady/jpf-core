@@ -5,43 +5,41 @@ import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.ToIntFunction;
 
 public class MultiCastingTest extends TestJPF {
-  public interface Area {
-    double area();
-  }
-
-  public interface Circumference {
-    double circumference();
-  }
-
-  public interface Dimension {
-    int dimension();
-  }
-
-  public class UnitSquare implements Area, Circumference, Dimension {
-    @Override
-    public double area() {
-      return 1.0;
-    }
-
-    @Override
-    public double circumference() {
-      return 4.0;
-    }
-
-    @Override
-    public int dimension() {
-      return 2;
-    }
-  }
-
-//  @Test
-//  public void testShapeCast() {
-//    Object sq = new UnitSquare();
-//    sq = (Area & Circumference & Dimension) sq;
+//  public interface X {}
+//
+//  public interface Y extends X {
+//    X lambda();
 //  }
+//
+//  public class A implements Y {
+//    @Override
+//    public String toString() {
+//      return "This is an A";
+//    }
+//
+//    @Override
+//    public A lambda() {
+//      return this;
+//    }
+//  }
+//
+//  public A lambdaFunction() {
+//    A a = new A();
+//    return (A & X)
+//      () -> a;
+//  }
+//
+//  @Test
+//  public void testCasting() {
+//    A a = lambdaFunction();
+//    System.out.println(a);
+//  }
+
+
 
   public static <K, V extends Comparable<? super V>> Comparator<Map.Entry<K, V>> comparingByValue() {
     return (Comparator<Map.Entry<K, V>> & Serializable)

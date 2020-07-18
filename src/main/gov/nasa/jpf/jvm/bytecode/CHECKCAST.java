@@ -47,15 +47,21 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
   @Override
   public Instruction execute (ThreadInfo ti) {
     StackFrame frame = ti.getTopFrame();
+    System.err.println();
+    System.err.println("Type: " + type);
+    System.err.println("Frame: " + ti);
     int objref = frame.peek();
+    System.err.println("Object ref: " + objref);
 
     if (objref == MJIEnv.NULL) {
+      System.err.println("Object ref is MJIEnv.NULL");
        // we can cast 'null' to anything
 
     } else {
       boolean isValid = false;
 
       if(Types.isReferenceSignature(type)) {
+        System.err.println(type + " is a reference signature");
         String t;
         if(Types.isArray(type)) {
           // retrieve the component terminal
@@ -67,7 +73,10 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
         // resolve the referenced class
         try {
           ti.resolveReferencedClass(t);
+          System.err.println("The referenced class " + t + " has been resolved");
         } catch(LoadOnJPFRequired lre) {
+          String s = String.format("ti.resolveReferencedClass(%s)", t);
+          System.err.println(s + " has failed");
           return ti.getPC();
         }
       }
@@ -83,7 +92,9 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
         }
 
       } else { // non-array types
+        System.err.println("The type is: " + type);
         isValid = e.getClassInfo().isInstanceOf(type);
+        System.err.println("isValid: " + isValid);
       }
 
       if (!isValid) {

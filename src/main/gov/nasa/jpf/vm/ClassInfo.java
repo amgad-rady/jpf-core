@@ -1622,11 +1622,15 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    */
   public boolean isInstanceOf (String cname) {
     if (isPrimitive()) {
+      System.err.println("Type " + cname + " is primitive");
       return Types.getJNITypeCode(name).equals(cname);
-
     } else {
+      System.err.println("Type " + cname + " is not primitive");
       cname = Types.getClassNameFromTypeName(cname);
+      System.err.println("Type is now " + cname);
       ClassInfo ci = this.classLoader.getResolvedClassInfo(cname);
+      String s = String.format("isInstanceOf(%s) ", ci);
+      System.err.println(s + " will be called");
       return isInstanceOf(ci);
     }
   }
@@ -1636,15 +1640,22 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    * or interface specified.
    */
   public boolean isInstanceOf (ClassInfo ci) {
+    System.err.println(ci + " is called");
     if (isPrimitive()) { // no inheritance for builtin types
+      System.err.println(ci + " is primitive");
       return (this==ci);
     } else {
       for (ClassInfo c = this; c != null; c = c.superClass) {
+        System.err.println(c + " is called in the superclass hierarchy");
         if (c==ci) {
           return true;
         }
       }
 
+      System.err.println("The superclass hierarchy has failed to return");
+      for (ClassInfo e : getAllInterfaces()) {
+        System.err.println("Interfaces contains: " + e);
+      }
       return getAllInterfaces().contains(ci);
     }
   }
