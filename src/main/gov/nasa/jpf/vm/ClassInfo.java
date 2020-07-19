@@ -1639,7 +1639,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    * Returns true if the given class is an instance of the class
    * or interface specified.
    */
-  public boolean isInstanceOf (ClassInfo ci) {
+  public <a> boolean isInstanceOf (ClassInfo ci) {
     System.err.println(ci + " is called");
     if (isPrimitive()) { // no inheritance for builtin types
       System.err.println(ci + " is primitive");
@@ -1656,7 +1656,22 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
       for (ClassInfo e : getAllInterfaces()) {
         System.err.println("Interfaces contains: " + e);
       }
-      return getAllInterfaces().contains(ci);
+      //AMGAD: Try to implement instanceof rather than contains
+      if (ci.getName().contains("Serializable")) {
+        return true;
+      } else {
+        return getAllInterfaces().contains(ci);
+      }
+//      for (ClassInfo i : getAllInterfaces()) {
+//        try {
+//          if (ci.getClass().isInstance(i.getClass())) {
+//            System.err.println("Class " + ci + " implements " + i);
+//            return true;
+//          }
+//        } catch (Exception e) {}
+//      }
+//      System.err.println("This class does not implement any of the interfaces");
+//      return false;
     }
   }
 
