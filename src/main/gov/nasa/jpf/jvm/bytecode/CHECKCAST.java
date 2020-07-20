@@ -75,8 +75,7 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
           ti.resolveReferencedClass(t);
           System.err.println("The referenced class " + t + " has been resolved");
         } catch(LoadOnJPFRequired lre) {
-          String s = String.format("ti.resolveReferencedClass(%s)", t);
-          System.err.println(s + " has failed");
+          System.err.println(String.format("ti.resolveReferencedClass(%s) has failed", t));
           return ti.getPC();
         }
       }
@@ -94,17 +93,17 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
         }
 
       } else { // non-array types
-        System.err.println("The non-array type is: " + type);
         isValid = e.getClassInfo().isInstanceOf(type);
         System.err.println("Value of isValid: " + isValid);
       }
 
       if (!isValid) {
+        System.err.println("Not a valid type casting");
         return ti.createAndThrowException("java.lang.ClassCastException",
                 e.getClassInfo().getName() + " cannot be cast to " + type);
       }
     }
-
+    System.err.println(String.format("Calling getNext(%s)", ti));
     return getNext(ti);
   }
 

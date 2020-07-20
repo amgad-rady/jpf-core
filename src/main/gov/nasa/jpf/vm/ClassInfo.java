@@ -1617,8 +1617,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     } else {
       cname = Types.getClassNameFromTypeName(cname);
       ClassInfo ci = this.classLoader.getResolvedClassInfo(cname);
-      String s = String.format("isInstanceOf(%s) ", ci);
-      System.err.println(s + " will be called by " + this);
+      System.err.println(String.format("isInstanceOf(%s) will be called by %s", ci, this));
       return isInstanceOf(ci);
     }
   }
