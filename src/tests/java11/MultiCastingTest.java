@@ -41,10 +41,10 @@ public class MultiCastingTest extends TestJPF {
 
 
 
-  public static <K, V extends Comparable<? super V>> Comparator<Map.Entry<K, V>> comparingByValue() {
-    return (Comparator<Map.Entry<K, V>> & Serializable)
-      (c_1, c_2) -> c_1.getValue().compareTo(c_2.getValue());
-  }
+//  public static <K, V extends Comparable<? super V>> Comparator<Map.Entry<K, V>> comparingByValue() {
+//    return (Comparator<Map.Entry<K, V>> & Serializable)
+//      (c_1, c_2) -> c_1.getValue().compareTo(c_2.getValue());
+//  }
 
   public static <T> Comparator<T> comparingInt(ToIntFunction<? super T> keyExtractor) {
     return (Comparator<T> & Serializable)
@@ -71,7 +71,6 @@ public class MultiCastingTest extends TestJPF {
       ToIntFunction<Integer> keyExtractor = (x) -> 0;
       Comparator<Integer> comparator = comparingInt(keyExtractor);
       int result = comparator.compare(0, 1);
-      System.out.println("Result: " + result);
     }
   }
 }

@@ -54,7 +54,7 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
     System.err.println("Object ref: " + objref);
 
     if (objref == MJIEnv.NULL) {
-      System.err.println("Object ref is MJIEnv.NULL");
+      System.err.println("Object ref is MJIEnv null");
        // we can cast 'null' to anything
 
     } else {
@@ -83,6 +83,8 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
 
       ElementInfo e = ti.getElementInfo(objref);
       ClassInfo eci = e.getClassInfo();
+      System.err.println("ElementInfo: " + e);
+      System.err.println("ClassInfo: " + eci);
 
       if (type.charAt(0) == '['){  // cast between array types
         if (eci.isArray()) {
@@ -92,9 +94,9 @@ public class CHECKCAST extends Instruction implements JVMInstruction {
         }
 
       } else { // non-array types
-        System.err.println("The type is: " + type);
+        System.err.println("The non-array type is: " + type);
         isValid = e.getClassInfo().isInstanceOf(type);
-        System.err.println("isValid: " + isValid);
+        System.err.println("Value of isValid: " + isValid);
       }
 
       if (!isValid) {

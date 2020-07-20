@@ -32,16 +32,7 @@ import gov.nasa.jpf.util.Source;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 
@@ -1622,15 +1613,12 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    */
   public boolean isInstanceOf (String cname) {
     if (isPrimitive()) {
-      System.err.println("Type " + cname + " is primitive");
       return Types.getJNITypeCode(name).equals(cname);
     } else {
-      System.err.println("Type " + cname + " is not primitive");
       cname = Types.getClassNameFromTypeName(cname);
-      System.err.println("Type is now " + cname);
       ClassInfo ci = this.classLoader.getResolvedClassInfo(cname);
       String s = String.format("isInstanceOf(%s) ", ci);
-      System.err.println(s + " will be called");
+      System.err.println(s + " will be called by " + this);
       return isInstanceOf(ci);
     }
   }
@@ -1640,38 +1628,25 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    * or interface specified.
    */
   public <a> boolean isInstanceOf (ClassInfo ci) {
-    System.err.println(ci + " is called");
     if (isPrimitive()) { // no inheritance for builtin types
-      System.err.println(ci + " is primitive");
       return (this==ci);
     } else {
+      //ClassInfo c = this
       for (ClassInfo c = this; c != null; c = c.superClass) {
-        System.err.println(c + " is called in the superclass hierarchy");
+        System.err.println(c + " with ID " + c.getId() + " is called in the superclass hierarchy");
         if (c==ci) {
+          System.err.println(ci + " has been found in " + this + "'s superclass hierarchy");
           return true;
         }
       }
-
       System.err.println("The superclass hierarchy has failed to return");
-      for (ClassInfo e : getAllInterfaces()) {
-        System.err.println("Interfaces contains: " + e);
-      }
-      //AMGAD: Try to implement instanceof rather than contains
-      if (ci.getName().contains("Serializable")) {
+      if (getAllInterfaces().contains(ci)) {
+        System.err.println(ci + " in " + getAllInterfaces());
         return true;
       } else {
-        return getAllInterfaces().contains(ci);
+        System.err.println(ci + " not in " + getAllInterfaces());
+        return false;
       }
-//      for (ClassInfo i : getAllInterfaces()) {
-//        try {
-//          if (ci.getClass().isInstance(i.getClass())) {
-//            System.err.println("Class " + ci + " implements " + i);
-//            return true;
-//          }
-//        } catch (Exception e) {}
-//      }
-//      System.err.println("This class does not implement any of the interfaces");
-//      return false;
     }
   }
 
