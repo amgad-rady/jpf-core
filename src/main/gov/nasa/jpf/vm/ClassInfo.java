@@ -590,10 +590,12 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
       } else {
         superClass = ClassLoaderInfo.getCurrentSystemClassLoader().getObjectClassInfo();
       }
+      System.err.println(this.getId() + " is calling loadArrayInterfaces");
       interfaceNames = loadArrayInterfaces();
       methods = loadArrayMethods();
     } else {
       superClass = null; // strange, but true, a 'no object' class
+      System.err.println(this.getId() + " is calling loadBuiltinInterface");
       interfaceNames = loadBuiltinInterfaces(name);
       methods = loadBuiltinMethods(name);
     }
@@ -644,6 +646,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     //superClass = objectClassInfo;
     superClass = ClassLoaderInfo.getSystemResolvedClassInfo("gov.nasa.jpf.AnnotationProxyBase");
 
+    System.err.println(this.getId() + " is using annotationCls.name");
     interfaceNames = new String[]{ annotationCls.name };    
     packageName = annotationCls.packageName;
     sourceFileName = annotationCls.sourceFileName;
@@ -700,6 +703,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
 
    superClassName = "java.lang.Object";
 
+   System.err.println(this.getId() + " is using funcInterface.name");
    interfaceNames = new String[]{ funcInterface.name };    
    packageName = enclosingClass.getPackageName();
 
@@ -1630,7 +1634,6 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     if (isPrimitive()) { // no inheritance for builtin types
       return (this==ci);
     } else {
-      //ClassInfo c = this
       for (ClassInfo c = this; c != null; c = c.superClass) {
         System.err.println(c + " with ID " + c.getId() + " is called in the superclass hierarchy");
         if (c==ci) {
@@ -1639,7 +1642,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
         }
       }
       System.err.println("The superclass hierarchy has failed to return");
-      if (getAllInterfaces().contains(ci)) {
+      if (this.getAllInterfaces().contains(ci)) {
         System.err.println(ci + " in " + getAllInterfaces());
         return true;
       } else {
