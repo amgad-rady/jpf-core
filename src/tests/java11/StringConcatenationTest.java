@@ -15,6 +15,16 @@ public class StringConcatenationTest extends TestJPF {
     }
 
     @Test
+    public void testStringConcatenationWith_typeDouble() {
+        if (verifyNoPropertyViolation()) {
+            double d = 17.4;
+            String actual = "foo returns " + d;
+            String expected = "foo returns 17.4";
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Test
     public void testStringConcatenation_SecondStringAsBmArg() {
         if (verifyNoPropertyViolation()) {
             String world = "world, ";

@@ -86,7 +86,9 @@ public class MethodTest extends TestJPF {
 
         Object res = m.invoke(o, 3, 3.33, "Blah");
         double d = ((Double) res).doubleValue();
-        System.out.println("foo returned " + d);
+        System.out.println("foo returned");
+        System.out.println(d);
+        //System.out.println("foo returned " + d);
 
         assert d == 123.456 : "wrong return value";
 
