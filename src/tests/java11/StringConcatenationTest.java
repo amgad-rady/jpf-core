@@ -104,6 +104,16 @@ public class StringConcatenationTest extends TestJPF {
     }
 
     @Test
+    public void testStringConcatenationWith_typeLong() {
+        if (verifyNoPropertyViolation()) {
+            long l = 1000;
+            String actual = "l is " + l;
+            String expected = "l is 1000";
+            assertEquals(expected, actual);
+        }
+    }
+
+    @Test
     public void testStringConcatenationWith_multipleStrings() {
         if (verifyNoPropertyViolation()) {
             String a = "This ";

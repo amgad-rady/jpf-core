@@ -29,6 +29,8 @@ import gov.nasa.jpf.vm.ThreadInfo;
 import gov.nasa.jpf.vm.Types;
 import gov.nasa.jpf.vm.VM;
 
+import java.util.Arrays;
+
 /**
  * @author Nastaran Shafiei <nastaran.shafiei@gmail.com>
  * 
@@ -47,6 +49,7 @@ public class INVOKEDYNAMIC extends Instruction {
   // the first captured variable always represents "this"
   String[] freeVariableTypeNames;
   byte[] freeVariableTypes;
+  int freeVariablesSize;
   
   String functionalInterfaceName;
   
@@ -64,6 +67,7 @@ public class INVOKEDYNAMIC extends Instruction {
     freeVariableTypeNames = Types.getArgumentTypeNames(descriptor);
     freeVariableTypes = Types.getArgumentTypes(descriptor);
     functionalInterfaceName = Types.getReturnTypeSignature(descriptor);
+    freeVariablesSize = Types.getArgumentsSize(descriptor);
   }
 
   @Override
@@ -122,8 +126,8 @@ public class INVOKEDYNAMIC extends Instruction {
               freeVariableTypeNames, freeVariableValues);
       lastFuncObj = ti.getHeap().get(funcObjRef);
     }
-    
-    frame.pop(freeVariableTypes.length);
+
+    frame.pop(freeVariablesSize);
     frame.pushRef(funcObjRef);
     
     return getNext(ti);
