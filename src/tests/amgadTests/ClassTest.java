@@ -28,6 +28,4 @@ public class ClassTest extends TestJPF {
       assertNull(c.getResource("not_existing_resources"));
     }
   }
-
-
 }
