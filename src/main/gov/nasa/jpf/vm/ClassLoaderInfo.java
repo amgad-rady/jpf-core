@@ -677,6 +677,12 @@ public class ClassLoaderInfo
    * Returns null if no Resource is found.
    */
   public String findResource (String resourceName){
+    System.err.println("\nThis is the findResource call");
+    System.err.println("getClassPathElements contains");
+    for (String s : getClassPathElements()) {
+      System.err.println(s);
+    }
+
     for (String cpe : getClassPathElements()) {
       String URL = getResourceURL(cpe, resourceName);
       if(URL != null) {
@@ -704,20 +710,32 @@ public class ClassLoaderInfo
   }
   
   protected String getResourceURL(String path, String resource) {
+    System.err.println("\nThis is the getResourceURL call");
+    System.err.println("path: " + path);
+    System.err.println("resource: " + resource);
     if(resource != null) {
       try {
         if (path.endsWith(".jar")){
           JarFile jar = new JarFile(path);
+          System.err.println("jar: " + jar);
           JarEntry e = jar.getJarEntry(resource);
+          System.err.println("jarEntry: " + e);
           if (e != null){
             File f = new File(path);
-            return "jar:" + f.toURI().toURL().toString() + "!/" + resource;
+            System.err.println("file: " + f);
+            String ret = "jar:" + f.toURI().toURL().toString() + "!/" + resource;
+            System.err.println("return string: " + ret);
+            return ret;
           }
+          System.err.println("jarEntry is null and this call returns null");
         } else {
           File f = new File(path, resource);
+          System.err.println("file: " + f);
           if (f.exists()){
+            System.err.println("f exists");
             return f.toURI().toURL().toString();
           }
+          System.err.println("file doesn't exist and this call returns null");
         }
       } catch (MalformedURLException mfx){
         return null;

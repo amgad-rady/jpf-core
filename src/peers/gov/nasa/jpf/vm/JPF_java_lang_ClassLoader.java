@@ -74,11 +74,16 @@ public class JPF_java_lang_ClassLoader extends NativePeer {
 
   @MJI
   public int getResource0__Ljava_lang_String_2__Ljava_lang_String_2 (MJIEnv env, int objRef, int resRef){
+    System.err.println("\nThis is the native peer");
     String rname = env.getStringObject(resRef);
+    System.err.println("rname: " + rname);
 
     ClassLoaderInfo cl = env.getClassLoaderInfo(objRef);
+    System.err.println("ClassLoaderInfo: " + cl);
 
+    //The cl.findResource call returns null
     String resourcePath = cl.findResource(rname);
+    System.err.println("resourcePath: " + resourcePath);
 
     return env.newString(resourcePath);
   }
