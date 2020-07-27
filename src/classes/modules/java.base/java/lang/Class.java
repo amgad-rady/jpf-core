@@ -125,6 +125,11 @@ public final class Class<T> implements Serializable, GenericDeclaration, Type, A
 
   public URL getResource (String rname) {
     String resolvedName = getResolvedName(rname);
+    System.err.println("rname: " + rname);
+    System.err.println("resolvedName: " + resolvedName);
+    System.err.println("this: " + this);
+    System.err.println("getClassLoader: " + getClassLoader());
+    System.err.println("getResource: " + getClassLoader().getResource(resolvedName));
     return getClassLoader().getResource(resolvedName);
   }
 
