@@ -765,6 +765,7 @@ public class ClassLoaderInfo
   
   public void addClassPathElement (String path){
     ClassFileContainer cfc = createClassFileContainer(path);
+    System.err.println("addClassPathElement has been called by " + this + " and added element " + cfc.getName());
     
     if (cfc != null){
       cp.addClassFileContainer(cfc);

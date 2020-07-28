@@ -103,6 +103,8 @@ public class JVMSystemClassLoaderInfo extends SystemClassLoaderInfo {
   }
 
   protected void addSystemBootClassPath () {
+    //AMGAD: This will always return null since this property has been removed in JDK9.
+    System.err.println("addSystemBootClassPath has been called by " + this);
     String v = System.getProperty("sun.boot.class.path");
     if (v != null) {
       for (String pn : v.split(File.pathSeparator)) {
@@ -114,6 +116,7 @@ public class JVMSystemClassLoaderInfo extends SystemClassLoaderInfo {
         }
       }
     } else {
+      System.err.println("We went into the empty branch of addSystemBootClassPath");
       // Hmm, maybe we are not executing on OpenJDK
     }
   }
