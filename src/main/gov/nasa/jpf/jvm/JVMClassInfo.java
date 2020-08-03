@@ -1034,7 +1034,7 @@ public class JVMClassInfo extends ClassInfo {
   
   // create a stack frame that has properly initialized arguments
   @Override
-  public StackFrame createStackFrame (ThreadInfo ti, MethodInfo callee){
+  public StackFrame createStackFrame(ThreadInfo ti, MethodInfo callee, MethodInfo caller){
     
     if (callee.isMJI()){
       NativeMethodInfo nativeCallee = (NativeMethodInfo) callee;

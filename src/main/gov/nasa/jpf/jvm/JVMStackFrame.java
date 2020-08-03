@@ -33,6 +33,8 @@ public class JVMStackFrame extends StackFrame {
   public JVMStackFrame (MethodInfo callee){
     super( callee);
   }
+
+  public JVMStackFrame (MethodInfo callee, MethodInfo caller) { super(callee, caller);}
   
   /**
    * creates callerSlots dummy Stackframe for testing of operand/local operations

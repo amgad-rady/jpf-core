@@ -142,9 +142,9 @@ public abstract class JVMInvokeInstruction extends InvokeInstruction implements 
 
   //--- invocation processing
 
-  protected void setupCallee (ThreadInfo ti, MethodInfo callee){
-    ClassInfo ciCaller = callee.getClassInfo();
-    StackFrame frame = ciCaller.createStackFrame( ti, callee);
+  protected void setupCallee (ThreadInfo ti, MethodInfo callee, MethodInfo caller){
+    ClassInfo ciCallee = callee.getClassInfo();
+    StackFrame frame = ciCallee.createStackFrame(ti, callee, caller);
     
     ti.pushFrame(frame);
     ti.enter();

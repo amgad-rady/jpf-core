@@ -103,6 +103,8 @@ public abstract class StackFrame implements Cloneable {
   protected Instruction pc;         // the next insn to execute (program counter)
   protected MethodInfo mi;          // which method is executed in this frame
 
+  protected MethodInfo miRoot;      // Original method of a call (used as a terminating condition in superclass recursion)
+
   static final int[] EMPTY_ARRAY = new int[0];
   static final FixedBitSet EMPTY_BITSET = new BitSet64();
 
@@ -129,6 +131,10 @@ public abstract class StackFrame implements Cloneable {
     this( callee, callee.getMaxLocals(), callee.getMaxStack());
   }
 
+  public StackFrame (MethodInfo callee, MethodInfo caller) {
+    this(callee, callee.getMaxLocals(), callee.getMaxStack());
+    miRoot = caller;
+  }
 
 
   /**

@@ -107,7 +107,7 @@ public class INVOKESTATIC extends JVMInvokeInstruction {
       }
     }
         
-    setupCallee( ti, callee); // this creates, initializes and pushes the callee StackFrame
+    setupCallee(ti, callee, null); // this creates, initializes and pushes the callee StackFrame
 
     return ti.getPC(); // we can't just return the first callee insn if a listener throws an exception
   }

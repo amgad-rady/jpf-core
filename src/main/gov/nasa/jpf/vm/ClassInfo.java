@@ -2600,7 +2600,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
   }
   
   // <2do> should be abstract
-  public StackFrame createStackFrame (ThreadInfo ti, MethodInfo callee){
+  public StackFrame createStackFrame(ThreadInfo ti, MethodInfo callee, MethodInfo caller){
     return null;
   }
   
