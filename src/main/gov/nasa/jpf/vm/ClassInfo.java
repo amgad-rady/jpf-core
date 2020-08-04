@@ -2604,6 +2604,14 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
   public DirectCallStackFrame createRunStartStackFrame (ThreadInfo ti, MethodInfo miRun){
     return null;
   }
+
+  //AMGAD: Add a method to add an interface
+  public void addInterface(ClassInfo ci) {
+    interfaces.add(ci);
+    System.err.println("Added " + ci + " to " + this);
+    Iterator<ClassInfo> ifaces = interfaces.iterator();
+    while(ifaces.hasNext()) {System.err.println("Interface: " + ifaces.next());}
+  }
 }
 
 
