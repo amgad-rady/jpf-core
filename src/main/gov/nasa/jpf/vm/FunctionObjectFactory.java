@@ -136,11 +136,11 @@ public class FunctionObjectFactory {
       freeVariableValues[0] = ei; // setting freeVariableValues to ei of new String.
       freeVariableTypeNames[0] = "String";
     } else {
-      ClassInfo intrface = new ClassInfo("java.io.Serializable", cli);
-      funcObjType.addInterface(intrface);
+//      ClassInfo intrface = fiClassInfo.getClassLoaderInfo().getResolvedClassInfo("java.io.Serializable");
+//      intrface.resolveClass();
+      funcObjType.addInterface("java.io.Serializable");
 
       System.err.println();
-      System.err.println("New interface: " + intrface);
       System.err.println("Interfaces of funcObjType " + funcObjType + " are:");
       for (String i : funcObjType.getDirectInterfaceNames()) {
         System.err.println(i);
