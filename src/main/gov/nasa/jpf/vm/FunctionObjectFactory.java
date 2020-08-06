@@ -136,10 +136,7 @@ public class FunctionObjectFactory {
       freeVariableValues[0] = ei; // setting freeVariableValues to ei of new String.
       freeVariableTypeNames[0] = "String";
     } else {
-//      ClassInfo intrface = fiClassInfo.getClassLoaderInfo().getResolvedClassInfo("java.io.Serializable");
-//      intrface.resolveClass();
       funcObjType.addInterface("java.io.Serializable");
-
       System.err.println();
       System.err.println("Interfaces of funcObjType " + funcObjType + " are:");
       for (String i : funcObjType.getDirectInterfaceNames()) {

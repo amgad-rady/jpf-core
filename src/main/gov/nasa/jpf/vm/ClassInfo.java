@@ -2617,8 +2617,14 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
   }
 
   protected void addInterface(String cname) {
-    ClassInfo.logger.finer("resolving interface: ", cname, " of ", name);
-    ClassInfo ifc = resolveReferencedClass(cname);
-    interfaces.add(ifc);
+    interfaces = null;
+    int n = interfaceNames.length;
+    String[] newInterfaceNames = new String[n + 1];
+    for (int i = 0; i < n; i++) {
+      newInterfaceNames[i] = interfaceNames[i];
+    }
+    newInterfaceNames[n] = cname;
+    interfaceNames = newInterfaceNames;
+    resolveClass();
   }
 }
