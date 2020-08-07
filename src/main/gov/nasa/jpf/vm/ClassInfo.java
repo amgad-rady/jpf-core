@@ -1076,7 +1076,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    * if we don't know the return type
    * signature is in paren/dot notation
    */
-  public MethodInfo getMethod (String name, String signature, boolean isRecursiveLookup) {
+  public MethodInfo getMethod (String name, String signature, boolean isRecursiveLookup, boolean checkPrivate) {
     MethodInfo mi = null;
     String matchName = name + signature;
 
@@ -1087,8 +1087,13 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
       }
     }
 
+    if ((mi != null) && checkPrivate && mi.isPrivate()) {
+      System.out.println(mi.getName() + " is in class " + mi.getClassInfo().getName());
+      return mi;
+    }
+
     if ((mi == null) && isRecursiveLookup && (superClass != null)) {
-      mi = superClass.getMethod(name, signature, true);
+      mi = superClass.getMethod(name, signature, true, false);
     }
 
     return mi;

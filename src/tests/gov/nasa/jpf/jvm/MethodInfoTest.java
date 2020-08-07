@@ -62,12 +62,12 @@ public class MethodInfoTest extends TestJPF {
       LocalVarInfo[] args;
 
       //--- the statics
-      mi = ci.getMethod("staticNoArgs", "()D", false);
+      mi = ci.getMethod("staticNoArgs", "()D", false, false);
       System.out.println("-- checking: " + mi);
       args = mi.getArgumentLocalVars();
       assertTrue("args not empty or null", args != null && args.length == 0);
 
-      mi = ci.getMethod("staticInt", "(I)D", false);
+      mi = ci.getMethod("staticInt", "(I)D", false, false);
       System.out.println("-- checking: " + mi);
       args = mi.getArgumentLocalVars();
       assertTrue("args null", args != null);
@@ -76,7 +76,7 @@ public class MethodInfoTest extends TestJPF {
       }
       assertTrue(args.length == 1 && args[0].getName().equals("intArg"));
 
-      mi = ci.getMethod("staticIntString", "(ILjava/lang/String;)D", false);
+      mi = ci.getMethod("staticIntString", "(ILjava/lang/String;)D", false, false);
       System.out.println("-- checking: " + mi);
       args = mi.getArgumentLocalVars();
       assertTrue("args null", args != null);
@@ -87,7 +87,7 @@ public class MethodInfoTest extends TestJPF {
 
       
       //--- the instances
-      mi = ci.getMethod("instanceNoArgs", "()D", false);
+      mi = ci.getMethod("instanceNoArgs", "()D", false, false);
       System.out.println("-- checking: " + mi);
       args = mi.getArgumentLocalVars();
       assertTrue("args null", args != null);
@@ -96,7 +96,7 @@ public class MethodInfoTest extends TestJPF {
       }
       assertTrue(args.length == 1 && args[0].getName().equals("this"));
       
-      mi = ci.getMethod("instanceInt", "(I)D", false);
+      mi = ci.getMethod("instanceInt", "(I)D", false, false);
       System.out.println("-- checking: " + mi);
       args = mi.getArgumentLocalVars();
       assertTrue("args null", args != null);
@@ -105,7 +105,7 @@ public class MethodInfoTest extends TestJPF {
       }
       assertTrue(args.length == 2 && args[0].getName().equals("this") && args[1].getName().equals("intArg"));
 
-      mi = ci.getMethod("instanceIntString", "(ILjava/lang/String;)D", false);
+      mi = ci.getMethod("instanceIntString", "(ILjava/lang/String;)D", false, false);
       System.out.println("-- checking: " + mi);
       args = mi.getArgumentLocalVars();
       assertTrue("args null", args != null);
@@ -130,7 +130,7 @@ public class MethodInfoTest extends TestJPF {
             "build/tests/gov/nasa/jpf/jvm/MethodInfoTest$MyClass.class");
     try {
       ClassInfo ci = new NonResolvedClassInfo("gov.nasa.jpf.jvm.MethodInfoTest$MyClass", file);
-      MethodInfo mi = ci.getMethod("instanceCycleMethod", "(II)I", false);
+      MethodInfo mi = ci.getMethod("instanceCycleMethod", "(II)I", false, false);
 
       nextInstruction:
       for (Instruction instruction : mi.getInstructions()) {
