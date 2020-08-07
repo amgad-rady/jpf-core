@@ -71,7 +71,7 @@ public class StopWatchFuzzer extends ListenerAdapter {
   public void classLoaded(VM vm, ClassInfo ci){
     if (miCurrentTimeMillis == null){
       if (ci.getName().equals("java.lang.System")) {
-        miCurrentTimeMillis = ci.getMethod("currentTimeMillis()J", false); // its got to be there
+        miCurrentTimeMillis = ci.getMethod("currentTimeMillis()J", false, false); // its got to be there
       }
     }
   }

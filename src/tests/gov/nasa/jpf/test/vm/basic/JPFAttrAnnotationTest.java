@@ -63,11 +63,11 @@ public class JPFAttrAnnotationTest extends TestJPF {
         assertTrue( ci.hasAttr(MyAttr.class));
         System.out.println("# class attr Ok");
         
-        MethodInfo mi = ci.getMethod("bar()V", false);
+        MethodInfo mi = ci.getMethod("bar()V", false, false);
         assertTrue( mi.hasAttr(MyAttr.class));
         System.out.println("# method bar() attr Ok");
        
-        mi = ci.getMethod("foo()V", false);
+        mi = ci.getMethod("foo()V", false, false);
         assertFalse( mi.hasAttr(MyAttr.class));
         
         FieldInfo fi = ci.getDeclaredInstanceField("data2");

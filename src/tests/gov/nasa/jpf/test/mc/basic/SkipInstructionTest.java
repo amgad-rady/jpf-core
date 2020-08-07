@@ -96,7 +96,7 @@ public class SkipInstructionTest extends TestJPF {
     @Override
     public void classLoaded (VM vm, ClassInfo ci) {
       if (ci.getName().equals("gov.nasa.jpf.test.mc.basic.SkipInstructionTest")) {
-        interceptedMethod = ci.getMethod("foo(II)I", false);
+        interceptedMethod = ci.getMethod("foo(II)I", false, false);
         assert interceptedMethod != null : "foo(II)I not found";
         System.out.println("method to intercept: " + interceptedMethod);
       }

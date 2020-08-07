@@ -255,8 +255,8 @@ public class ClassLoaderInfo
 
   private boolean hasOriginalLoadingImp() {
     String signature = "(Ljava/lang/String;)Ljava/lang/Class;";
-    MethodInfo loadClass = classInfo.getMethod("loadClass" + signature, true);
-    MethodInfo findClass = classInfo.getMethod("findClass" + signature, true);
+    MethodInfo loadClass = classInfo.getMethod("loadClass" + signature, true, false);
+    MethodInfo findClass = classInfo.getMethod("findClass" + signature, true, false);
   
     return (loadClass.getClassName().equals("java.lang.ClassLoader") &&
         findClass.getClassName().equals("java.net.URLClassLoader"));
@@ -600,7 +600,7 @@ public class ClassLoaderInfo
     ClassInfo clClass = VM.getVM().getClassInfo(objRef);
 
     // retrieve the loadClass() method of this ClassLoader class
-    MethodInfo miLoadClass = clClass.getMethod("loadClass(Ljava/lang/String;)Ljava/lang/Class;", true);
+    MethodInfo miLoadClass = clClass.getMethod("loadClass(Ljava/lang/String;)Ljava/lang/Class;", true, false);
 
     // create a frame representing loadClass() & push it to the stack of the  current thread 
     DirectCallStackFrame frame = miLoadClass.createDirectCallStackFrame( ti, 0);

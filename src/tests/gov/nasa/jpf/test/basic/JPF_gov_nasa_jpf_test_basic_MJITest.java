@@ -158,7 +158,7 @@ public class JPF_gov_nasa_jpf_test_basic_MJITest extends NativePeer {
   public int nativeRoundtripLoop__I__I (MJIEnv env, int robj, int a) {
     System.out.println("# entering nativeRoundtripLoop(): " + a);
 
-    MethodInfo mi = env.getClassInfo(robj).getMethod("roundtrip(I)I",false);
+    MethodInfo mi = env.getClassInfo(robj).getMethod("roundtrip(I)I",false,false);
     ThreadInfo ti = env.getThreadInfo();
     DirectCallStackFrame frame = ti.getReturnedDirectCall();
 
@@ -211,7 +211,7 @@ public class JPF_gov_nasa_jpf_test_basic_MJITest extends NativePeer {
     ThreadInfo ti = env.getThreadInfo();
     
     System.out.println("# entering nativeHiddenRoundtrip: " + a);
-    MethodInfo mi = env.getClassInfo(robj).getMethod("atomicStuff(I)I",false);
+    MethodInfo mi = env.getClassInfo(robj).getMethod("atomicStuff(I)I",false,false);
 
     DirectCallStackFrame frame = mi.createDirectCallStackFrame(ti, 0);
     

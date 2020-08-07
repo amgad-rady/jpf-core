@@ -377,7 +377,7 @@ public class NativePeer implements Cloneable {
       if (implCls != peerClass) {
         ClassInfo ciSuper = ci.getSuperClass();
         if (ciSuper != null){
-          MethodInfo mi = ciSuper.getMethod(mname, true);
+          MethodInfo mi = ciSuper.getMethod(mname, true, false);
           if (mi != null){
             if (mi instanceof NativeMethodInfo){
               NativeMethodInfo nmi = (NativeMethodInfo)mi;

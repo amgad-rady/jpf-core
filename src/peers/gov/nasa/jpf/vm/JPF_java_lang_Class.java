@@ -224,7 +224,7 @@ public class JPF_java_lang_Class extends NativePeer {
     DirectCallStackFrame frame = ti.getReturnedDirectCall();
     
     ClassInfo ci = env.getReferredClassInfo(robj);   // what are we
-    MethodInfo miCtor = ci.getMethod("<init>()V", true); // note there always is one since something needs to call Object()
+    MethodInfo miCtor = ci.getMethod("<init>()V", true, false); // note there always is one since something needs to call Object()
 
     if (frame == null){ // first time around
       if(ci.isAbstract()){ // not allowed to instantiate

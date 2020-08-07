@@ -54,7 +54,7 @@ public class JPF_gov_nasa_jpf_AnnotationProxyBase extends NativePeer {
         return false;
       }
       // oof, someone implemented an annotation in user code. Delegate to their equals and let them deal with it
-      MethodInfo mi = otherProxy.getMethod("equals(Ljava/lang/Object;)Z", true);
+      MethodInfo mi = otherProxy.getMethod("equals(Ljava/lang/Object;)Z", true, false);
       assert mi != null;
       ThreadInfo ti = env.getThreadInfo();
       DirectCallStackFrame frame = ti.getReturnedDirectCall();

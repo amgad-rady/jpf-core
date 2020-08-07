@@ -56,7 +56,7 @@ public class JPF_gov_nasa_jpf_util_test_TestJPF extends NativePeer {
       testMethods = new MethodInfo[selectedTests.length];
       int i = 0;
       for (String test : selectedTests) {
-        MethodInfo mi = testClass.getMethod(test + "()V", false);
+        MethodInfo mi = testClass.getMethod(test + "()V", false, false);
         if (mi != null && mi.isPublic() && !mi.isStatic()) {
           testMethods[i++] = mi;
         } else {
@@ -105,7 +105,7 @@ public class JPF_gov_nasa_jpf_util_test_TestJPF extends NativePeer {
         StackFrame frame = env.getCallerStackFrame(); // the runTestsOfThisClass() caller
 
         testClass = frame.getClassInfo();
-        testClassCtor = testClass.getMethod("<init>()V", true);
+        testClassCtor = testClass.getMethod("<init>()V", true, false);
 
         String[] selectedTests = env.getStringArrayObject(selectedTestsRef);
         if (initializeTestMethods(env, selectedTests)) {

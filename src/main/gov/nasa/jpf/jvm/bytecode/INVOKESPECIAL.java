@@ -106,7 +106,7 @@ public class INVOKESPECIAL extends InstanceInvocation {
     if (invokedMethod == null) {
       ClassInfo ci = ClassLoaderInfo.getCurrentResolvedClassInfo(cname);
       boolean recursiveLookup = (mname.charAt(0) != '<'); // no hierarchy lookup for <init>
-      invokedMethod = ci.getMethod(mname, recursiveLookup);
+      invokedMethod = ci.getMethod(mname, recursiveLookup, false);
     }
 
     return invokedMethod; // we can store internally
