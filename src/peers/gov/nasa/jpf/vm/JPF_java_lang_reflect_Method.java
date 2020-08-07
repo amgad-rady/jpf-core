@@ -522,7 +522,7 @@ public class JPF_java_lang_reflect_Method extends NativePeer {
     
     // our superclass annotations
     for (ci = ci.getSuperClass(); ci != null; ci = ci.getSuperClass()){
-      mi = ci.getMethod(mname, msig, false);
+      mi = ci.getMethod(mname, msig, false, false);
       if (mi != null){
         for (AnnotationInfo ai: mi.getAnnotations()){
           aiList.add(ai);

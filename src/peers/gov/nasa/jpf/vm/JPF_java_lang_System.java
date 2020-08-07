@@ -138,7 +138,7 @@ public class JPF_java_lang_System extends NativePeer {
     Heap heap = vm.getHeap();
     ElementInfo eiClassPath = heap.newString(JAVA_CLASS_PATH, ti);
     
-    MethodInfo miGetProperty = system.getMethod("getProperty(Ljava/lang/String;)Ljava/lang/String;", true);
+    MethodInfo miGetProperty = system.getMethod("getProperty(Ljava/lang/String;)Ljava/lang/String;", true, false);
     DirectCallStackFrame frame = miGetProperty.createDirectCallStackFrame(ti, 0);
     frame.setReferenceArgument( 0, eiClassPath.getObjectRef(), null);
     frame.setFireWall(); // we don't want exceptions to escape into the SUT

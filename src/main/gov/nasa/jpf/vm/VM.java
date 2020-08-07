@@ -524,7 +524,7 @@ public abstract class VM {
   }
 
   protected MethodInfo getMainEntryMethodInfo (String mthName, ClassInfo ciMain) {
-    MethodInfo miMain = ciMain.getMethod(mthName, true);
+    MethodInfo miMain = ciMain.getMethod(mthName, true, false);
 
     //--- do some sanity checks if this is a valid entry method
     if (miMain == null || !miMain.isStatic()) {
@@ -536,7 +536,7 @@ public abstract class VM {
   
   protected void pushClinits (List<ClassInfo> startupClasses, ThreadInfo tiMain) {
     for (ClassInfo ci : startupClasses){
-      MethodInfo mi = ci.getMethod("<clinit>()V", false);
+      MethodInfo mi = ci.getMethod("<clinit>()V", false, false);
       if (mi != null) {
         DirectCallStackFrame frame = mi.createDirectCallStackFrame(tiMain, 0);
         tiMain.pushFrame(frame);

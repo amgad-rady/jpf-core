@@ -890,7 +890,7 @@ public String getCompleteName () {
     if (ci != null) {
       ClassInfo sci = ci.getSuperClass();
       if (sci != null){
-        smi = sci.getMethod(getUniqueName(), true);
+        smi = sci.getMethod(getUniqueName(), true, false);
       }
     }
     

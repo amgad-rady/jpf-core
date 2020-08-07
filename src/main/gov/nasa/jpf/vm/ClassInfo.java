@@ -1058,11 +1058,15 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    * searching in (either by means of the object type, or by means of the
    * constpool classname entry).
    */
-  public MethodInfo getMethod (String uniqueName, boolean isRecursiveLookup) {
+  public MethodInfo getMethod (String uniqueName, boolean isRecursiveLookup, boolean checkPrivate) {
     MethodInfo mi = methods.get(uniqueName);
 
+    if ((mi != null) && checkPrivate && mi.isPrivate()) {
+      System.out.println(mi + " is in class " + mi.getClassInfo().getName());
+      return mi;}
+
     if ((mi == null) && isRecursiveLookup && (superClass != null)) {
-      mi = superClass.getMethod(uniqueName, true);
+      mi = superClass.getMethod(uniqueName, true, false);
     }
 
     return mi;
@@ -1072,7 +1076,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    * if we don't know the return type
    * signature is in paren/dot notation
    */
-  public MethodInfo getMethod (String name, String signature, boolean isRecursiveLookup) {
+  public MethodInfo getMethod (String name, String signature, boolean isRecursiveLookup, boolean checkPrivate) {
     MethodInfo mi = null;
     String matchName = name + signature;
 
@@ -1083,8 +1087,13 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
       }
     }
 
+    if ((mi != null) && checkPrivate && mi.isPrivate()) {
+      System.out.println(mi.getName() + " is in class " + mi.getClassInfo().getName());
+      return mi;
+    }
+
     if ((mi == null) && isRecursiveLookup && (superClass != null)) {
-      mi = superClass.getMethod(name, signature, true);
+      mi = superClass.getMethod(name, signature, true, false);
     }
 
     return mi;
@@ -1095,7 +1104,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     MethodInfo mi = null;
     
     for (ClassInfo ciIfc : this.getAllInterfaces()){
-      MethodInfo miIfc = ciIfc.getMethod(uniqueName, false);
+      MethodInfo miIfc = ciIfc.getMethod(uniqueName, false, false);
       if (miIfc != null && !miIfc.isAbstract() && !miIfc.isPrivate() && !miIfc.isStatic()){
         if (mi != null && !mi.equals(miIfc)){
           if(miIfc.getClassInfo().isSubInterfaceOf(mi.getClassInfo())) {
@@ -1140,7 +1149,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     ClassInfo objCi = ClassLoaderInfo.getCurrentResolvedClassInfo("java.lang.Object");
     
     for(MethodInfo mi: this.methods.values()) {
-      if(mi.isAbstract() && objCi.getMethod(mi.getUniqueName(), false)==null) {
+      if(mi.isAbstract() && objCi.getMethod(mi.getUniqueName(), false, false)==null) {
         return mi;
       }
     }
@@ -1517,7 +1526,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     
     if (enclosingMethodName != null){
       ClassInfo ciIncl = getEnclosingClassInfo();
-      miEncl = ciIncl.getMethod( enclosingMethodName, false);
+      miEncl = ciIncl.getMethod( enclosingMethodName, false, true);
     }
     
     return miEncl;
@@ -2228,7 +2237,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
         if (status != ti.getId()) {
           // even if it is already initializing - if it does not happen in the current thread
           // we have to sync, which we do by calling clinit
-          MethodInfo mi = ci.getMethod("<clinit>()V", false);
+          MethodInfo mi = ci.getMethod("<clinit>()V", false, false);
           if (mi != null) {
             DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
             ti.pushFrame( frame);
@@ -2263,7 +2272,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
 
       int status = sei.getStatus();
       if (status != INITIALIZED && status != ti.getId()){
-          MethodInfo mi = ci.getMethod("<clinit>()V", false);
+          MethodInfo mi = ci.getMethod("<clinit>()V", false, false);
           if (mi != null) {
             DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
             ti.executeMethodAtomic(frame);
@@ -2477,7 +2486,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
   }
 
   protected MethodInfo getFinalizer0 () {
-    MethodInfo mi = getMethod("finalize()V", true);
+    MethodInfo mi = getMethod("finalize()V", true, false);
 
     // we are only interested in non-empty method bodies, Object.finalize()
     // is a dummy

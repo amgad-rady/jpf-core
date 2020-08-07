@@ -97,7 +97,7 @@ public class TypeAnnotationTest extends TestJPF {
         assertTrue( numberOfTargetTypes(tais, ClassFile.FIELD) == 1);
         
         System.out.println("--- methods");
-        MethodInfo mi = loadedClass.getMethod("baz(II)I", false);
+        MethodInfo mi = loadedClass.getMethod("baz(II)I", false, false);
         tais = mi.getTypeAnnotations();
         for (AbstractTypeAnnotationInfo tai : tais){
           System.out.println("  " + tai);

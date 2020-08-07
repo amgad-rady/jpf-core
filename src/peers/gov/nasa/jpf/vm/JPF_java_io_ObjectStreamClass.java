@@ -35,7 +35,7 @@ public class JPF_java_io_ObjectStreamClass extends NativePeer {
   @MJI
   public boolean hasStaticInitializer__Ljava_lang_Class_2__Z (MJIEnv env, int objRef, int clsRef){
     ClassInfo ci = env.getReferredClassInfo(clsRef);
-    MethodInfo mi = ci.getMethod("<clinit>()V", false);          
+    MethodInfo mi = ci.getMethod("<clinit>()V", false, false);
     return (mi != null);
   }
 

@@ -121,7 +121,7 @@ public class FinalizerThreadInfo extends ThreadInfo {
    * start the thread.
    */
   protected void startFinalizerThread() {
-    MethodInfo mi = ci.getMethod("run()V", false);
+    MethodInfo mi = ci.getMethod("run()V", false, false);
     DirectCallStackFrame frame = mi.createDirectCallStackFrame(this, 0);
     frame.setReferenceArgument(0, objRef, frame);
     pushFrame(frame);

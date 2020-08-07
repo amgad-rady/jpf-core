@@ -159,7 +159,7 @@ public abstract class VirtualInvocation extends InstanceInvocation {
 
       if (lastCalleeCi != cci) { // callee ClassInfo has changed
         lastCalleeCi = cci;
-        invokedMethod = cci.getMethod(mname, true);
+        invokedMethod = cci.getMethod(mname, true, true);
 
         if (invokedMethod == null) {
           invokedMethod = cci.getDefaultMethod(mname);

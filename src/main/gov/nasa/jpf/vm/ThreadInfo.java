@@ -850,7 +850,7 @@ public class ThreadInfo extends InfoObject
   }
   
   MethodInfo getExitMethod() {
-    MethodInfo mi = getClassInfo().getMethod("exit()V", true);
+    MethodInfo mi = getClassInfo().getMethod("exit()V", true, false);
     return mi;
   }
 
@@ -2999,7 +2999,7 @@ public class ThreadInfo extends InfoObject
     while (grpRef != MJIEnv.NULL){
       ElementInfo eiGrp = getElementInfo(grpRef);
       ClassInfo ciGrp = eiGrp.getClassInfo();
-      MethodInfo miHandler = ciGrp.getMethod("uncaughtException(Ljava/lang/Thread;Ljava/lang/Throwable;)V", true);
+      MethodInfo miHandler = ciGrp.getMethod("uncaughtException(Ljava/lang/Thread;Ljava/lang/Throwable;)V", true, false);
       ClassInfo ciHandler = miHandler.getClassInfo();
       if (!ciHandler.getName().equals("java.lang.ThreadGroup")) {
         return eiGrp.getObjectRef();
@@ -3045,7 +3045,7 @@ public class ThreadInfo extends InfoObject
   protected Instruction callUncaughtHandler (ExceptionInfo xi, int handlerRef, String id){
     ElementInfo eiHandler = getElementInfo(handlerRef);
     ClassInfo ciHandler = eiHandler.getClassInfo();
-    MethodInfo miHandler = ciHandler.getMethod("uncaughtException(Ljava/lang/Thread;Ljava/lang/Throwable;)V", true);
+    MethodInfo miHandler = ciHandler.getMethod("uncaughtException(Ljava/lang/Thread;Ljava/lang/Throwable;)V", true, false);
 
     // we have to clear this here in case there is a CG while executing the uncaughtHandler
     pendingException = null;

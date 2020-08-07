@@ -165,7 +165,7 @@ public class JVMClassInfo extends ClassInfo {
     // helper method for setBootstrapMethod()
     public void setBootstrapMethodInfo(ClassInfo enclosingCls, String mthName, String parameters, int idx, int refKind, 
                               String descriptor, String bmArg,BootstrapMethodInfo.BMType bmType){
-      MethodInfo methodBody = enclosingCls.getMethod(mthName + parameters, false);
+      MethodInfo methodBody = enclosingCls.getMethod(mthName + parameters, false, false);
       
       if(methodBody!=null) {
         bootstrapMethods[idx] = new BootstrapMethodInfo(refKind, JVMClassInfo.this, methodBody, descriptor
@@ -855,7 +855,7 @@ public class JVMClassInfo extends ClassInfo {
       ((JVMClassInfo) superClass).addClassInit(ti, frame, cb);      // go recursive
     }
 
-    if (getMethod("<clinit>()V", false) != null) { // do we have a clinit
+    if (getMethod("<clinit>()V", false, false) != null) { // do we have a clinit
       cb.invokeclinit(this);
     } else {
       cb.finishclinit(this);

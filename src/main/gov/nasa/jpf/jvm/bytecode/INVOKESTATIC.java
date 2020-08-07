@@ -128,7 +128,7 @@ public class INVOKESTATIC extends JVMInvokeInstruction {
     if (invokedMethod == null) {
       ClassInfo clsInfo = getClassInfo();
       if (clsInfo != null){
-        MethodInfo callee = clsInfo.getMethod(mname, true);
+        MethodInfo callee = clsInfo.getMethod(mname, true, false);
         if (callee != null){
           ClassInfo ciCallee = callee.getClassInfo(); // might be a superclass of ci, i.e. not what is referenced in the insn
 
@@ -136,7 +136,7 @@ public class INVOKESTATIC extends JVMInvokeInstruction {
             // if it wasn't registered yet, classLoaded listeners didn't have a chance yet to modify it..
             ciCallee.registerClass(ti);
             // .. and might replace/remove MethodInfos
-            callee = clsInfo.getMethod(mname, true);
+            callee = clsInfo.getMethod(mname, true, false);
           }
           invokedMethod = callee;
         }

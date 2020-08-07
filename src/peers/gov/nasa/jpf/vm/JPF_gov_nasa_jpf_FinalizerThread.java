@@ -38,7 +38,7 @@ public class JPF_gov_nasa_jpf_FinalizerThread extends NativePeer {
     if(elements.length>0 && elements[0]==objRef) {
       ThreadInfo finalizerTi = env.getThreadInfo();
       ClassInfo objCi = env.getElementInfo(objRef).getClassInfo();
-      MethodInfo mi = objCi.getMethod("finalize()V", false);
+      MethodInfo mi = objCi.getMethod("finalize()V", false, false);
     
       // create and push a stack frame for finalize()V
       DirectCallStackFrame frame = mi.createDirectCallStackFrame(finalizerTi, 0);
