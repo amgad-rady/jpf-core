@@ -1060,13 +1060,21 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
    */
   public MethodInfo getMethod (String uniqueName, boolean isRecursiveLookup, boolean checkPrivate) {
     MethodInfo mi = methods.get(uniqueName);
+    System.err.println();
+    System.err.println("getMethod called on " + this.getName() + " and is looking for " + uniqueName);
+    if (mi == null) {
+      System.err.println(uniqueName + " was not found");
+    } else {
+      System.err.println("mi is " +  mi);
+    }
 
     if ((mi != null) && checkPrivate && mi.isPrivate()) {
       System.out.println(mi + " is in class " + mi.getClassInfo().getName());
       return mi;}
 
     if ((mi == null) && isRecursiveLookup && (superClass != null)) {
-      mi = superClass.getMethod(uniqueName, true, false);
+      System.err.println("mi is null");
+      mi = superClass.getMethod(uniqueName, true, true);
     }
 
     return mi;
@@ -1526,7 +1534,7 @@ public class ClassInfo extends InfoObject implements Iterable<MethodInfo>, Gener
     
     if (enclosingMethodName != null){
       ClassInfo ciIncl = getEnclosingClassInfo();
-      miEncl = ciIncl.getMethod( enclosingMethodName, false, true);
+      miEncl = ciIncl.getMethod( enclosingMethodName, false, false);
     }
     
     return miEncl;

@@ -86,6 +86,8 @@ public abstract class VirtualInvocation extends InstanceInvocation {
     int objRef = ti.getCalleeThis(getArgSize());
     MethodInfo callee;
 
+    System.err.println("invokevirtual called in " + ti.getPC().getMethodInfo().getClassInfo().getName());
+
     if (objRef == MJIEnv.NULL) {
       lastObj = MJIEnv.NULL;
       return ti.createAndThrowException("java.lang.NullPointerException", "Calling '" + mname + "' on null object");
@@ -152,10 +154,30 @@ public abstract class VirtualInvocation extends InstanceInvocation {
 
   public MethodInfo getInvokedMethod (ThreadInfo ti, int objRef) {
 
+    System.err.println();
+    System.err.println();
+    System.err.println("getInvokedMethod called by " + ti.getPC().getMethodInfo().getClassInfo());
+    System.err.println("Looking for method " + mname);
+    System.err.println(mname + " called from " + ti.getPC().getMethodInfo().getName());
+
+    //First make a check for the private method here.
+    if (ti.getPC().getMethodInfo().getName().contains("callToX1")) {
+
+      ClassInfo privCci = ti.getPC().getMethodInfo().getClassInfo();
+      System.err.println("privCci is " + privCci);
+      MethodInfo privMi = privCci.getMethod(mname, false, true);
+      if (privMi != null) {
+        invokedMethod = privMi;
+        lastCalleeCi = privCci;
+        return invokedMethod;
+      }
+    }
+
     if (objRef != MJIEnv.NULL) {
       lastObj = objRef;
 
       ClassInfo cci = ti.getClassInfo(objRef);
+      System.err.println("getInvokedMethod called by " + cci.getName());
 
       if (lastCalleeCi != cci) { // callee ClassInfo has changed
         lastCalleeCi = cci;
