@@ -24,7 +24,9 @@ class X3 extends X2 {}
 public class DispatchTest extends TestJPF {
   @Test
   public void dispatchTest() {
-    int expected = 1;
-    assertEquals(expected, (new X3()).callToX1());
+    if (verifyNoPropertyViolation()) {
+      int expected = 1;
+      assertEquals(expected, (new X3()).callToX1());
+    }
   }
 }

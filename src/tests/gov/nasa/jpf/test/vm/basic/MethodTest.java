@@ -175,6 +175,7 @@ public class MethodTest extends TestMethodBase {
   public void testSpecialCall() {
     if (verifyNoPropertyViolation()) {
       MethodTest o = new MethodTest();
+      System.err.println("o.har = " + o.har());
       assert o.har() == 7;
     }
   }
