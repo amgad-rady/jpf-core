@@ -20,6 +20,7 @@ package gov.nasa.jpf.vm;
 import gov.nasa.jpf.jvm.bytecode.GETSTATIC;
 
 import java.lang.invoke.*;
+import java.util.Map;
 
 /**
  * @author Nastaran Shafiei <nastaran.shafiei@gmail.com>
@@ -111,11 +112,19 @@ public class FunctionObjectFactory {
           return env.getStringObject(objRef);
         } catch (Exception e) {
           try {
-            return ei.toString();
-//            ClassInfo ci = env.getClassInfo(objRef);
-//            MethodInfo mi = ci.getMethod("toString", true);
-//            DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
-//            ti.pushFrame(frame);
+//            return ei.toString();
+            ClassInfo ci = env.getClassInfo(objRef);
+            //This should always be non-null since every object has a toString method
+            for (Map.Entry<String, MethodInfo> entry : ci.methods.entrySet()) {
+              System.err.println("Key " + entry.getKey() + " has uniqueName: " + entry.getValue().uniqueName);
+            }
+            MethodInfo mi = ci.getMethod("toString()Ljava/lang/String;", true);
+            DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
+            ti.pushFrame(frame);
+            Instruction insn = ti.getPC();
+            String x = (String) insn.getAttr();
+            System.err.println(x);
+            return x;
           } catch (Exception ee) {
             ee.printStackTrace();
             return null;
