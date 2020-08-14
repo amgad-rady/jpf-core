@@ -17,6 +17,8 @@
  */
 package gov.nasa.jpf.vm;
 
+import gov.nasa.jpf.jvm.bytecode.GETSTATIC;
+
 import java.lang.invoke.*;
 
 /**
@@ -74,7 +76,7 @@ public class FunctionObjectFactory {
    * @param ei  referenced ElementInfo object
    * @return JVM representation of the wrapped ElementInfo object
    */
-  private static Object derefElementInfo(MJIEnv env, ElementInfo ei) {
+  private static Object derefElementInfo(MJIEnv env, ElementInfo ei, ThreadInfo ti) {
     String name = ei.getClassInfo().getName();
     int objRef = ei.getObjectRef();
     switch (name) {
@@ -110,6 +112,11 @@ public class FunctionObjectFactory {
         } catch (Exception e) {
           try {
             return ei.toString();
+//            ClassInfo ci = env.getClassInfo(objRef);
+//            MethodInfo mi = ci.getMethod("toString", true);
+//            DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
+//            ti.pushFrame(frame);
+//            (new GETSTATIC()).execute(ti);
           } catch (Exception ee) {
             ee.printStackTrace();
             return null;
@@ -165,7 +172,7 @@ public class FunctionObjectFactory {
     for (int i = 0; i < freeVariableValues.length; i++) {
       if (freeVariableValues[i] instanceof ElementInfo) {
         //Dereference composite types
-        convFreeVarVals[i] = derefElementInfo(env, (ElementInfo) freeVariableValues[i]);
+        convFreeVarVals[i] = derefElementInfo(env, (ElementInfo) freeVariableValues[i], ti);
       } else {
         //Copy primitive types
         convFreeVarVals[i] = freeVariableValues[i];

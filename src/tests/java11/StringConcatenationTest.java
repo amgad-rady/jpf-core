@@ -4,6 +4,28 @@ import gov.nasa.jpf.util.test.TestJPF;
 import org.junit.Test;
 
 public class StringConcatenationTest extends TestJPF {
+    class X {
+        int num;
+
+        public String toString() {
+            return "X has value " + num;
+        }
+
+        public X (int n) {
+            num = n;
+        }
+    }
+
+    @Test
+    public void testStringConcatenation_toString() {
+        if (verifyNoPropertyViolation()) {
+            X x = new X(7);
+            String expected = "What is X? " + x;
+            String actual = "What is X? X has value 7";
+            assertEquals(expected, actual);
+        }
+    }
+
     @Test
     public void testStringConcatenation_firstStringAsBmArg() {
         if (verifyNoPropertyViolation()) {
