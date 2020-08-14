@@ -36,6 +36,10 @@ public class GETSTATIC extends JVMStaticFieldInstruction  implements ReadInstruc
 
   public GETSTATIC(String fieldName, String clsDescriptor, String fieldDescriptor){
     super(fieldName, clsDescriptor, fieldDescriptor);
+//    System.out.println();
+//    System.out.println(fieldName);
+//    System.out.println(clsDescriptor);
+//    System.out.println(fieldDescriptor);
   }
 
   @Override

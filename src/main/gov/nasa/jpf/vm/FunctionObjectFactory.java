@@ -116,7 +116,6 @@ public class FunctionObjectFactory {
 //            MethodInfo mi = ci.getMethod("toString", true);
 //            DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
 //            ti.pushFrame(frame);
-//            (new GETSTATIC()).execute(ti);
           } catch (Exception ee) {
             ee.printStackTrace();
             return null;
