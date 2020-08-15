@@ -21,7 +21,7 @@ public class StringConcatenationTest extends TestJPF {
         if (verifyNoPropertyViolation()) {
             X x = new X(7);
             String expected = "What is X? " + x;
-            System.out.println(x);
+            System.out.println(expected);
             String actual = "What is X? X has value 7";
             assertEquals(expected, actual);
         }
