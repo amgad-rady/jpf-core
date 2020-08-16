@@ -17,15 +17,28 @@
  */
 package gov.nasa.jpf.vm;
 
-import gov.nasa.jpf.jvm.bytecode.GETSTATIC;
-
 import java.lang.invoke.*;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Nastaran Shafiei <nastaran.shafiei@gmail.com>
  */
 public class FunctionObjectFactory {
+  private final String[] primitiveTypes = {"java.lang.Byte",
+    "java.lang.Short",
+    "java.lang.Integer",
+    "java.lang.Long",
+    "java.lang.Float",
+    "java.lang.Double",
+    "java.lang.Character",
+    "java.lang.Boolean"};
+
+  public int[] toStringIndicator;
+  public int indicatorIdx = 0;
+  public ArrayList<String> returnedStrings = new ArrayList<>();
+  public int count = 0;
+
   /**
    * Return JVM class objects from JPF class labels
    *
@@ -111,29 +124,30 @@ public class FunctionObjectFactory {
         try {
           return env.getStringObject(objRef);
         } catch (Exception e) {
-          try {
-//            return ei.toString();
-            ClassInfo ci = env.getClassInfo(objRef);
-            //This should always be non-null since every object has a toString method
-            for (Map.Entry<String, MethodInfo> entry : ci.methods.entrySet()) {
-              System.err.println("Key " + entry.getKey() + " has uniqueName: " + entry.getValue().uniqueName);
-            }
-            MethodInfo mi = ci.getMethod("toString()Ljava/lang/String;", true);
-            //DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
-            ti.pushFrame(ci.createDirectCallStackFrame(ti, mi, 0));
-            Instruction insn = ti.getPC();
-            insn.execute(ti);
-            StackFrame frame = ti.popAndGetTopFrame();
-            for (Object entry : frame.attrs) {
-              System.err.println(entry);
-            }
-            return null;
-          } catch (Exception ee) {
-            ee.printStackTrace();
-            return null;
-          }
+          e.printStackTrace();
+          return null;
         }
     }
+  }
+
+  public Instruction injectCallToString(ElementInfo ei, ThreadInfo ti) {
+    int objRef = ei.getObjectRef();
+    MJIEnv env = ti.getEnv();
+    ClassInfo ci = env.getClassInfo(objRef);
+    MethodInfo mi = ci.getMethod("toString()Ljava/lang/String;", true);
+    DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
+    ti.pushFrame(frame);
+    return ti.getPC();
+  }
+
+  public int[] indicatorToStringCalls(Object[] freeVariableValues) {
+    int[] indicator = new int[freeVariableValues.length];
+    for (int i = 0; i < freeVariableValues.length; i++) {
+      if ((freeVariableValues[i] instanceof ElementInfo) && (Arrays.asList(primitiveTypes).contains(((ElementInfo) freeVariableValues[i]).getClassInfo().getName()))) {
+        indicator[i] = 1;
+      }
+    }
+    return indicator;
   }
 
   public int getFunctionObject(int bsIdx, ThreadInfo ti, ClassInfo fiClassInfo, String samUniqueName, BootstrapMethodInfo bmi,

@@ -119,6 +119,35 @@ public class INVOKEDYNAMIC extends Instruction {
       FunctionObjectFactory funcObjFactory = vm.getFunctionObjectFacotry();
       
       Object[] freeVariableValues = frame.getArgumentsValues(ti, freeVariableTypes);
+
+      //toString code injection here
+      //if funcObjFactory is in an initial state, lock it and determine the count
+      if (funcObjFactory.toStringIndicator == null && funcObjFactory.indicatorIdx == 0) {
+        funcObjFactory.toStringIndicator = funcObjFactory.indicatorToStringCalls(freeVariableValues);
+      }
+
+      //if funcObjFactory has been initialized, start adding stackframes
+      if (funcObjFactory.toStringIndicator != null && funcObjFactory.indicatorIdx < freeVariableValues.length) {
+        funcObjFactory.indicatorIdx++;
+        if (funcObjFactory.toStringIndicator[funcObjFactory.indicatorIdx - 1] == 1) {
+          funcObjFactory.count++;
+          return funcObjFactory.injectCallToString((ElementInfo) freeVariableValues[funcObjFactory.indicatorIdx - 1], ti);
+        } else {
+          return ti.getPC();
+        }
+      }
+
+      //Finish the injection by collecting the frames and reset funcObjFactory after the injection is complete
+      if (funcObjFactory.toStringIndicator != null && funcObjFactory.indicatorIdx >= freeVariableValues.length) {
+        while (funcObjFactory.count > 0) {
+          //Deal with the stack frames and get the returned value;
+          funcObjFactory.count--;
+        }
+
+        //Reset
+        funcObjFactory.toStringIndicator = null;
+        funcObjFactory.indicatorIdx = 0;
+      }
       
       funcObjRef = funcObjFactory.getFunctionObject(bootstrapMethodIndex, ti, fiClassInfo, samMethodName, bmi,
               freeVariableTypeNames, freeVariableValues);
