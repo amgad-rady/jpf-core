@@ -29,6 +29,8 @@ import gov.nasa.jpf.vm.ThreadInfo;
 import gov.nasa.jpf.vm.Types;
 import gov.nasa.jpf.vm.VM;
 
+import java.util.ArrayList;
+
 /**
  * @author Nastaran Shafiei <nastaran.shafiei@gmail.com>
  * 
@@ -123,12 +125,15 @@ public class INVOKEDYNAMIC extends Instruction {
       //toString code injection here
       //if funcObjFactory is in an initial state, lock it and determine the count
       if (funcObjFactory.toStringIndicator == null && funcObjFactory.indicatorIdx == 0) {
+        System.err.println("First call");
         funcObjFactory.toStringIndicator = funcObjFactory.indicatorToStringCalls(freeVariableValues);
       }
 
       //if funcObjFactory has been initialized, start adding stackframes
       if (funcObjFactory.toStringIndicator != null && funcObjFactory.indicatorIdx < freeVariableValues.length) {
+        System.err.println("Indicator: " + funcObjFactory.indicatorIdx);
         funcObjFactory.indicatorIdx++;
+        System.err.println("Indicator incremented to: " + funcObjFactory.indicatorIdx);
         if (funcObjFactory.toStringIndicator[funcObjFactory.indicatorIdx - 1] == 1) {
           funcObjFactory.count++;
           return funcObjFactory.injectCallToString((ElementInfo) freeVariableValues[funcObjFactory.indicatorIdx - 1], ti);
@@ -141,6 +146,11 @@ public class INVOKEDYNAMIC extends Instruction {
       if (funcObjFactory.toStringIndicator != null && funcObjFactory.indicatorIdx >= freeVariableValues.length) {
         while (funcObjFactory.count > 0) {
           //Deal with the stack frames and get the returned value;
+          int returnedStringRef = ti.getTopFrame().pop();
+          ElementInfo eiString = ti.getHeap().get(returnedStringRef);
+          String output = eiString.toString();
+
+          funcObjFactory.returnedStrings.push(output);
           funcObjFactory.count--;
         }
 
@@ -148,7 +158,8 @@ public class INVOKEDYNAMIC extends Instruction {
         funcObjFactory.toStringIndicator = null;
         funcObjFactory.indicatorIdx = 0;
       }
-      
+
+      //This call should reset the array of returned strings before returning
       funcObjRef = funcObjFactory.getFunctionObject(bootstrapMethodIndex, ti, fiClassInfo, samMethodName, bmi,
               freeVariableTypeNames, freeVariableValues);
       lastFuncObj = ti.getHeap().get(funcObjRef);

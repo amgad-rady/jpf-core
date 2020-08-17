@@ -18,8 +18,9 @@
 package gov.nasa.jpf.vm;
 
 import java.lang.invoke.*;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 
 /**
  * @author Nastaran Shafiei <nastaran.shafiei@gmail.com>
@@ -36,7 +37,7 @@ public class FunctionObjectFactory {
 
   public int[] toStringIndicator;
   public int indicatorIdx = 0;
-  public ArrayList<String> returnedStrings = new ArrayList<>();
+  public Deque<String> returnedStrings = new ArrayDeque<String>();
   public int count = 0;
 
   /**
@@ -131,19 +132,31 @@ public class FunctionObjectFactory {
   }
 
   public Instruction injectCallToString(ElementInfo ei, ThreadInfo ti) {
+    System.err.println("CALL TO injectCallToString");
+    System.err.println("ElementInfo: " + ei);
+    System.err.println("ThreadInfo: " + ti);
     int objRef = ei.getObjectRef();
+    System.err.println("objRef: " + objRef);
     MJIEnv env = ti.getEnv();
+    System.err.println("env: " + env);
     ClassInfo ci = env.getClassInfo(objRef);
+    System.err.println("ClassInfo: " + ci);
     MethodInfo mi = ci.getMethod("toString()Ljava/lang/String;", true);
+    System.err.println("MethodInfo: " + mi);
+    if (mi == null) {
+      System.err.println("Something terrible has happened.");
+    }
     DirectCallStackFrame frame = ci.createDirectCallStackFrame(ti, mi, 0);
+    System.err.println("Frame: " + frame);
     ti.pushFrame(frame);
+    System.err.println("Pushed frame " + frame + " and returning");
     return ti.getPC();
   }
 
   public int[] indicatorToStringCalls(Object[] freeVariableValues) {
     int[] indicator = new int[freeVariableValues.length];
     for (int i = 0; i < freeVariableValues.length; i++) {
-      if ((freeVariableValues[i] instanceof ElementInfo) && (Arrays.asList(primitiveTypes).contains(((ElementInfo) freeVariableValues[i]).getClassInfo().getName()))) {
+      if ((freeVariableValues[i] instanceof ElementInfo) && !(Arrays.asList(primitiveTypes).contains(((ElementInfo) freeVariableValues[i]).getClassInfo().getName()))) {
         indicator[i] = 1;
       }
     }
@@ -194,10 +207,15 @@ public class FunctionObjectFactory {
     MJIEnv env = new MJIEnv(ti);
     Class<?>[] pTypes = getPTypes(freeVariableTypeNames);
     Object[] convFreeVarVals = new Object[freeVariableValues.length];
-    for (int i = 0; i < freeVariableValues.length; i++) {
-      if (freeVariableValues[i] instanceof ElementInfo) {
+
+    System.err.println("RETURNED STRINGS:");
+    System.err.println(Arrays.toString(returnedStrings.toArray()));
+    for (int i = freeVariableValues.length - 1; i > 0; i--) {
+      if ((freeVariableValues[i] instanceof ElementInfo) && (toStringIndicator[i] == 0)) {
         //Dereference composite types
         convFreeVarVals[i] = derefElementInfo(env, (ElementInfo) freeVariableValues[i], ti);
+      } else if ((freeVariableValues[i] instanceof ElementInfo) && (toStringIndicator[i] == 1)) {
+        convFreeVarVals[i] = returnedStrings.pop();
       } else {
         //Copy primitive types
         convFreeVarVals[i] = freeVariableValues[i];
